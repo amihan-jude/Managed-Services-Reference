@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Managed Services — One-Stop Reference</title>
+<style>
+  :root{
+    --ink:#151C2C;
+    --paper:#EEEBE2;
+    --paper-raised:#F7F5EE;
+    --teal:#2B5F58;
+    --teal-deep:#1D423D;
+    --line:#D8D2C2;
+    --p1:#B23A32;
+    --p2:#C0742A;
+    --p3:#A98A1F;
+    --p4:#4C5B73;
+    --muted:#6B6455;
+    --display: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --body: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.5; -webkit-font-smoothing:antialiased; }
+
+  .shell{ display:grid; grid-template-columns: 270px 1fr; min-height:100vh; }
+  @media (max-width: 880px){ .shell{ grid-template-columns: 1fr; } nav.rail{ display:none; } }
+
+  nav.rail{ position:sticky; top:0; height:100vh; border-right:1px solid var(--line); background:var(--paper-raised); padding:24px 0 24px 0; overflow-y:auto; }
+  .rail-brand{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); padding:0 24px 14px 24px; }
+  .rail-brand strong{ display:block; font-family:var(--display); font-size:16px; letter-spacing:0; text-transform:none; color:var(--ink); margin-top:4px; }
+
+  .proj-switch{ padding:0 24px 16px 24px; border-bottom:1px solid var(--line); margin-bottom:6px; }
+  .proj-label{ font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted); margin-bottom:8px; }
+  .proj-btn{
+    display:block; width:100%; text-align:left; background:transparent; border:1px solid var(--line);
+    padding:8px 10px; margin-bottom:6px; font-family:var(--body); font-size:12.5px; color:var(--ink);
+    cursor:pointer; border-radius:2px; line-height:1.3;
+  }
+  .proj-btn .pname{ font-weight:700; display:block; }
+  .proj-btn .pclient{ font-family:var(--mono); font-size:10px; color:var(--muted); }
+  .proj-btn:hover{ border-color:var(--teal); }
+  .proj-btn.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .proj-btn.active .pclient{ color:rgba(255,255,255,0.75); }
+
+  .stub{ display:flex; align-items:center; gap:10px; padding:9px 24px; text-decoration:none; color:var(--ink); font-size:13.5px; border-left:3px solid transparent; }
+  .stub:hover, .stub.active{ background:rgba(43,95,88,0.08); border-left:3px solid var(--teal); }
+  .stub .tag{ font-family:var(--mono); font-size:10px; color:var(--muted); min-width:26px; }
+  .rail-foot{ margin-top:18px; padding:14px 24px 0 24px; border-top:1px solid var(--line); font-size:11px; color:var(--muted); font-family:var(--mono); }
+
+  main{ padding: 46px 56px 100px 56px; max-width: 980px; }
+  @media (max-width:880px){ main{ padding: 32px 20px 80px 20px; } }
+
+  header.hero{ border-bottom: 2px solid var(--ink); padding-bottom: 24px; margin-bottom: 36px; }
+  .eyebrow{ font-family:var(--mono); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--teal-deep); display:flex; align-items:center; gap:10px; }
+  .eyebrow .dot{ width:7px;height:7px;border-radius:50%; background:var(--teal); display:inline-block; }
+  h1{ font-family:var(--display); font-weight:700; font-size:clamp(26px, 3.6vw, 40px); letter-spacing:-0.01em; margin:10px 0 8px 0; }
+  .hero-sub{ color:var(--muted); font-size:14.5px; max-width:660px; }
+
+  .factstrip{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:0; margin-top:22px; border:1px solid var(--line); background:var(--paper-raised); }
+  .fact{ padding:13px 16px; border-right:1px solid var(--line); }
+  .fact:last-child{border-right:none;}
+  .fact .k{ font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted); margin-bottom:4px; }
+  .fact .v{ font-size:14px; font-weight:600; }
+
+  section{ margin-bottom:52px; scroll-margin-top:24px; }
+  .section-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:16px; border-bottom:1px solid var(--line); padding-bottom:10px; }
+  .section-head .num{ font-family:var(--mono); font-size:12px; color:var(--muted); background:var(--paper-raised); border:1px solid var(--line); padding:2px 7px; }
+  .section-head h2{ font-family:var(--display); font-size:22px; margin:0; font-weight:700; }
+  .section-desc{ color:var(--muted); font-size:13px; margin:-8px 0 18px 0; }
+
+  .cardgrid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:14px; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); padding:15px 17px; }
+  .card h3{ font-size:13.5px; margin:0 0 7px 0; font-weight:700; color:var(--teal-deep); }
+  .card p{ margin:0; font-size:13px; color:#333; }
+  .card .thresh{ margin-top:9px; font-family:var(--mono); font-size:10.5px; color:var(--muted); }
+
+  .oos-list{ display:flex; flex-direction:column; border:1px solid var(--line); }
+  .oos-row{ display:grid; grid-template-columns: 26px 210px 1fr 170px; gap:14px; padding:11px 15px; border-bottom:1px solid var(--line); font-size:13px; align-items:start; }
+  .oos-row:last-child{ border-bottom:none; }
+  .oos-row:nth-child(odd){ background:var(--paper-raised); }
+  .oos-letter{ font-family:var(--mono); color:#fff; background:var(--p1); width:20px;height:20px; display:flex;align-items:center;justify-content:center; font-size:10.5px; border-radius:2px; }
+  .oos-item{ font-weight:700; }
+  .oos-path{ font-family:var(--mono); font-size:10.5px; color:var(--teal-deep); }
+  @media (max-width:720px){ .oos-row{ grid-template-columns:22px 1fr; } .oos-path, .oos-desc{ grid-column: 2; } }
+
+  table.sla{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.sla th{ text-align:left; font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); padding:7px 9px; border-bottom:2px solid var(--ink); }
+  table.sla td{ padding:8px 9px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  table.sla tr:hover td{ background:rgba(43,95,88,0.05); }
+  .prio{ font-family:var(--mono); font-size:10.5px; font-weight:700; color:#fff; padding:2px 6px; border-radius:2px; display:inline-block; min-width:24px; text-align:center; }
+  .prio.p1{ background:var(--p1); } .prio.p2{ background:var(--p2); } .prio.p3{ background:var(--p3); } .prio.p4{ background:var(--p4); } .prio.all{ background:var(--teal); }
+  td.num{ font-family:var(--mono); }
+
+  .sla-note{ margin-top:14px; background:var(--paper-raised); border:1px solid var(--line); border-left:3px solid var(--teal); padding:13px 16px; font-size:12px; color:#333; }
+  .sla-note ul{ margin:6px 0 0 18px; padding:0; } .sla-note li{ margin-bottom:4px; }
+
+  .escalation{ display:flex; flex-wrap:wrap; align-items:stretch; gap:0; margin-bottom:20px; }
+  .tier{ background:var(--paper-raised); border:1px solid var(--line); padding:12px 14px; flex:1 1 140px; }
+  .tier + .tier{ border-left:none; }
+  .tier .tlabel{ font-family:var(--mono); font-size:9.5px; color:var(--muted); text-transform:uppercase; }
+  .tier .tname{ font-weight:700; font-size:13px; margin:4px 0 5px 0; }
+  .tier .tshift{ font-family:var(--mono); font-size:10px; color:var(--teal-deep); }
+  .arrow{ display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:15px; padding:0 3px; flex:0 0 auto; }
+  @media (max-width:720px){ .escalation{ flex-direction:column; } .tier + .tier{ border-left:1px solid var(--line); border-top:none; } .arrow{ transform:rotate(90deg); padding:2px 0; } }
+
+  .stafftable{ width:100%; border-collapse:collapse; font-size:12.5px; margin-top:10px;}
+  .stafftable th{ text-align:left; font-family:var(--mono); font-size:10px; text-transform:uppercase; color:var(--muted); padding:7px 9px; border-bottom:2px solid var(--ink); }
+  .stafftable td{ padding:8px 9px; border-bottom:1px solid var(--line); }
+
+  .pricing-list{ display:flex; flex-direction:column; border:1px solid var(--line);}
+  .price-row{ display:grid; grid-template-columns: 1fr 220px 190px; gap:12px; padding:11px 15px; border-bottom:1px solid var(--line); font-size:13px; align-items:center; }
+  .price-row:last-child{border-bottom:none;}
+  .price-row:nth-child(odd){ background:var(--paper-raised); }
+  .price-row .pname{ font-weight:700; }
+  .price-row .pnote{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .amt{ font-family:var(--mono); font-size:12px; }
+  .amt.tbd{ color:var(--p2); background:rgba(192,116,42,0.12); padding:2px 6px; border-radius:2px; display:inline-block; }
+  @media (max-width:720px){ .price-row{ grid-template-columns:1fr; gap:4px; } }
+
+  .commsgrid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap:14px; }
+  .comm{ border:1px solid var(--line); background:var(--paper-raised); padding:13px 15px; }
+  .comm .clabel{ font-family:var(--mono); font-size:10px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  .comm .cval{ font-size:13px; }
+
+  footer{ border-top:1px solid var(--line); margin-top:36px; padding-top:16px; font-size:11px; color:var(--muted); font-family:var(--mono); }
+  ::selection{ background: rgba(43,95,88,.25); }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+  /* ---------- Add Project ---------- */
+  .proj-btn-row{ display:flex; align-items:center; gap:6px; }
+  .proj-btn-row .proj-btn{ flex:1; margin-bottom:0; }
+  .del-btn{
+    flex:0 0 auto; width:22px; height:22px; border:1px solid var(--line); background:var(--paper-raised);
+    color:var(--p1); font-family:var(--mono); font-size:12px; cursor:pointer; border-radius:2px; line-height:1;
+  }
+  .del-btn:hover{ background:var(--p1); color:#fff; border-color:var(--p1); }
+  .add-proj-btn{
+    display:flex; align-items:center; justify-content:center; gap:6px; width:100%;
+    background:transparent; border:1px dashed var(--teal); color:var(--teal-deep);
+    font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em;
+    padding:9px 10px; margin-top:4px; cursor:pointer; border-radius:2px;
+  }
+  .add-proj-btn:hover{ background:rgba(43,95,88,0.08); }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(21,28,44,0.55); display:none;
+    align-items:flex-start; justify-content:center; z-index:100; padding:40px 20px; overflow-y:auto;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-box{
+    background:var(--paper); border:1px solid var(--line); max-width:760px; width:100%;
+    padding:30px 34px 34px 34px; position:relative;
+  }
+  .modal-box h2{ font-family:var(--display); font-size:24px; margin:0 0 6px 0; }
+  .modal-sub{ color:var(--muted); font-size:12.5px; margin:0 0 22px 0; max-width:640px; }
+  .modal-close{
+    position:absolute; top:22px; right:24px; background:none; border:none; font-size:20px;
+    color:var(--muted); cursor:pointer; font-family:var(--mono); line-height:1;
+  }
+  .modal-close:hover{ color:var(--ink); }
+  .field-block{ margin-bottom:18px; }
+  .field-block label{
+    display:block; font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--teal-deep); margin-bottom:5px; font-weight:700;
+  }
+  .field-block .hint{ display:block; font-family:var(--body); text-transform:none; letter-spacing:0; color:var(--muted); font-weight:400; font-size:11.5px; margin-top:2px; }
+  .field-row{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .field-block input[type=text]{
+    width:100%; padding:8px 10px; border:1px solid var(--line); background:var(--paper-raised);
+    font-family:var(--body); font-size:13px; color:var(--ink);
+  }
+  .field-block textarea{
+    width:100%; padding:9px 10px; border:1px solid var(--line); background:var(--paper-raised);
+    font-family:var(--mono); font-size:12px; color:var(--ink); resize:vertical; min-height:64px; line-height:1.5;
+  }
+  .field-block input:focus, .field-block textarea:focus{ outline:2px solid var(--teal); outline-offset:1px; }
+  .modal-actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:26px; border-top:1px solid var(--line); padding-top:18px; }
+  .btn{
+    font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em;
+    padding:10px 18px; border-radius:2px; cursor:pointer; border:1px solid var(--line);
+  }
+  .btn-primary{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .btn-primary:hover{ background:var(--teal-deep); }
+  .btn-secondary{ background:transparent; color:var(--ink); }
+  .btn-secondary:hover{ background:var(--paper-raised); }
+  .save-flash{
+    position:fixed; bottom:26px; right:26px; background:var(--teal-deep); color:#fff; font-family:var(--mono);
+    font-size:12px; padding:10px 16px; border-radius:2px; opacity:0; transform:translateY(8px);
+    transition:opacity .25s ease, transform .25s ease; z-index:200; pointer-events:none;
+  }
+  .save-flash.show{ opacity:1; transform:translateY(0); }
+
+  /* ---------- Status ---------- */
+  .status-toggle{
+    display:inline-flex; align-items:center; gap:7px; margin-top:14px; padding:6px 12px;
+    border:1px solid var(--line); background:var(--paper-raised); cursor:pointer; border-radius:2px;
+    font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink);
+  }
+  .status-toggle .dot{ width:8px; height:8px; border-radius:50%; background:var(--muted); display:inline-block; }
+  .status-toggle.active{ border-color:var(--teal); color:var(--teal-deep); }
+  .status-toggle.active .dot{ background:var(--teal); }
+  .status-toggle.inactive .dot{ background:var(--muted); }
+  .status-toggle:hover{ background:rgba(43,95,88,0.08); }
+  .status-toggle .hintTxt{ color:var(--muted); font-family:var(--body); text-transform:none; letter-spacing:0; font-size:11px; }
+
+  .pclient-row{ display:flex; align-items:center; gap:6px; }
+  .sw-dot{ width:7px; height:7px; border-radius:50%; background:var(--muted); flex:0 0 auto; }
+  .sw-dot.active{ background:var(--teal); }
+  .proj-btn.inactive{ opacity:0.68; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <nav class="rail" id="rail">
+    <div class="rail-brand">Reference Ledger<strong>Managed Services</strong></div>
+
+    <div class="proj-switch" id="projSwitch"></div>
+    <div style="padding:0 24px 16px 24px; border-bottom:1px solid var(--line); margin-bottom:6px;">
+      <button class="add-proj-btn" id="addProjBtn">+ Add Project</button>
+    </div>
+
+    <a class="stub" href="#overview"><span class="tag">00</span> Overview</a>
+    <a class="stub" href="#scope"><span class="tag">01</span> Scope of Work</a>
+    <a class="stub" href="#outofscope"><span class="tag">02</span> Out of Scope</a>
+    <a class="stub" href="#sla"><span class="tag">03</span> SLAs</a>
+    <a class="stub" href="#tiers"><span class="tag">04</span> Support Tiers</a>
+    <a class="stub" href="#pricing"><span class="tag">05</span> Pricing &amp; Fees</a>
+    <a class="stub" href="#comms"><span class="tag">06</span> Escalation &amp; Comms</a>
+    <div class="rail-foot" id="railFoot"></div>
+  </nav>
+
+  <main>
+    <header class="hero" id="overview">
+      <div class="eyebrow"><span class="dot"></span>Managed Services · One-Stop Reference</div>
+      <h1 id="hTitle"></h1>
+      <p class="hero-sub" id="hSub"></p>
+      <button class="status-toggle" id="statusToggle" title="Click to toggle Active / Inactive">
+        <span class="dot"></span><span id="statusText">Active</span><span class="hintTxt">— click to toggle</span>
+      </button>
+      <div class="factstrip" id="factsRow1"></div>
+      <div class="factstrip" id="factsRow2" style="margin-top:-1px;"></div>
+    </header>
+
+    <section id="scope">
+      <div class="section-head"><span class="num">01</span><h2>Scope of Work</h2></div>
+      <p class="section-desc" id="scopeDesc"></p>
+      <div class="cardgrid" id="scopeCards"></div>
+    </section>
+
+    <section id="outofscope">
+      <div class="section-head"><span class="num">02</span><h2>Out of Scope</h2></div>
+      <p class="section-desc" id="oosDesc">Exclusions carry a path back in — most route through a signed Change Order.</p>
+      <div class="oos-list" id="oosList"></div>
+    </section>
+
+    <section id="sla">
+      <div class="section-head"><span class="num">03</span><h2>Service Level Agreement</h2></div>
+      <p class="section-desc" id="slaDesc"></p>
+      <table class="sla">
+        <thead><tr><th>Priority</th><th>SLA / Stage</th><th>Response</th><th>Resolution</th><th>Committed</th></tr></thead>
+        <tbody id="slaBody"></tbody>
+      </table>
+      <div class="sla-note" id="slaNote"></div>
+    </section>
+
+    <section id="tiers">
+      <div class="section-head"><span class="num">04</span><h2 id="tiersHeading">Support Tiers &amp; Escalation</h2></div>
+      <p class="section-desc" id="tiersDesc"></p>
+      <div class="escalation" id="escalationRow"></div>
+      <table class="stafftable">
+        <thead><tr><th id="staffCol1">Tier</th><th>FTE</th><th>Function</th></tr></thead>
+        <tbody id="staffBody"></tbody>
+      </table>
+    </section>
+
+    <section id="pricing">
+      <div class="section-head"><span class="num">05</span><h2>Pricing &amp; Fees</h2></div>
+      <p class="section-desc">Figures marked <span class="amt tbd">TBD</span> are referenced in the SOW's text but not stated as dollar amounts — confirm against the Order Form / pricing schedule.</p>
+      <div class="pricing-list" id="pricingList"></div>
+    </section>
+
+    <section id="comms">
+      <div class="section-head"><span class="num">06</span><h2>Escalation &amp; Communications</h2></div>
+      <div class="commsgrid" id="commsGrid"></div>
+    </section>
+
+    <footer id="pageFooter"></footer>
+  </main>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    <h2>Add a Project</h2>
+    <p class="modal-sub">Paste extracted details from a new SOW here, following the intake schema. Saved projects persist in this browser and appear in the project switcher alongside the four built-in examples.</p>
+
+    <div class="field-row">
+      <div class="field-block">
+        <label>Project Name<span class="hint">Shown as the page title</span></label>
+        <input type="text" id="fName" placeholder="e.g. XYZ Platform Managed Services">
+      </div>
+      <div class="field-block">
+        <label>Client<span class="hint">Shown on the project button</span></label>
+        <input type="text" id="fClient" placeholder="e.g. Acme Corp">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-block">
+        <label>SOW Reference</label>
+        <input type="text" id="fSowRef" placeholder="e.g. SOW 2026-1">
+      </div>
+      <div class="field-block">
+        <label>Contractor</label>
+        <input type="text" id="fContractor" placeholder="e.g. Nmblr, Inc.">
+      </div>
+    </div>
+    <div class="field-block">
+      <label>Status</label>
+      <select id="fStatus" style="width:100%; padding:8px 10px; border:1px solid var(--line); background:var(--paper-raised); font-family:var(--body); font-size:13px; color:var(--ink);">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+    <div class="field-block">
+      <label>Subtitle / Summary<span class="hint">One or two sentences describing the engagement</span></label>
+      <textarea id="fSub" style="min-height:44px;"></textarea>
+    </div>
+
+    <div class="field-block">
+      <label>Overview Facts — row 1<span class="hint">One per line: Label | Value (aim for 5)</span></label>
+      <textarea id="fFacts1" placeholder="Client | Acme Corp&#10;Contractor | Nmblr, Inc.&#10;Effective Date | Jan 1, 2027&#10;Period of Performance | 1 year&#10;Status | Active"></textarea>
+    </div>
+    <div class="field-block">
+      <label>Overview Facts — row 2<span class="hint">One per line: Label | Value (aim for 5)</span></label>
+      <textarea id="fFacts2" placeholder="Incident Mgmt Hours | 24x7&#10;Service Request Hours | 8x5&#10;Delivery Location | Remote&#10;Tier Model | L1 / L2 / L3&#10;Ticketing Tool | Jira"></textarea>
+    </div>
+
+    <div class="field-block">
+      <label>Scope Intro<span class="hint">One-line summary shown above the scope cards</span></label>
+      <input type="text" id="fScopeDesc">
+    </div>
+    <div class="field-block">
+      <label>Scope Cards<span class="hint">One per line: Title | Description | Threshold (threshold optional)</span></label>
+      <textarea id="fScopeCards" placeholder="Application Support | Bug fixes, minor patches, minor upgrades | Effort cap: 20 hrs/activity"></textarea>
+    </div>
+
+    <div class="field-block">
+      <label>Out of Scope<span class="hint">One per line: Letter | Item | Description | Path to include</span></label>
+      <textarea id="fOos" placeholder="a | Third-Party Platforms | Vendor-level fixes excluded | Vendor responsibility"></textarea>
+    </div>
+
+    <div class="field-block">
+      <label>SLA Intro</label>
+      <input type="text" id="fSlaDesc">
+    </div>
+    <div class="field-block">
+      <label>SLA Rows<span class="hint">One per line: class(p1/p2/p3/p4/all) | Priority label | SLA name | Response | Resolution | Committed</span></label>
+      <textarea id="fSla" placeholder="p1 | P1 | Incident Response | 30 min | — | 90%"></textarea>
+    </div>
+    <div class="field-block">
+      <label>SLA Notes<span class="hint">One bullet per line — rendered as a note list</span></label>
+      <textarea id="fSlaNote" style="min-height:50px;" placeholder="Credits apply only to Critical Service Level defaults."></textarea>
+    </div>
+
+    <div class="field-row">
+      <div class="field-block">
+        <label>Tiers Section Heading</label>
+        <input type="text" id="fTiersHeading" placeholder="Support Tiers &amp; Escalation">
+      </div>
+      <div class="field-block">
+        <label>Staff Table First Column Label</label>
+        <input type="text" id="fStaffCol1" placeholder="Tier">
+      </div>
+    </div>
+    <div class="field-block">
+      <label>Tiers Intro</label>
+      <input type="text" id="fTiersDesc">
+    </div>
+    <div class="field-block">
+      <label>Escalation Chain<span class="hint">One per line: Label | Name | Shift/Contact — shown as boxes with arrows</span></label>
+      <textarea id="fEscalation" style="min-height:50px;" placeholder="L1 | MS Support | 24x7"></textarea>
+    </div>
+    <div class="field-block">
+      <label>Staffing Table<span class="hint">One per line: Tier/Role | FTE | Function</span></label>
+      <textarea id="fStaff" placeholder="L1 MS Support | 1 | First-line acknowledgement and dispatch"></textarea>
+    </div>
+
+    <div class="field-block">
+      <label>Pricing &amp; Fees<span class="hint">One per line: Name | Note | Amount (blank = not stated) | Basis</span></label>
+      <textarea id="fPricing" placeholder="Managed Service Fees | Recurring | | Per PO/JO"></textarea>
+    </div>
+
+    <div class="field-block">
+      <label>Escalation &amp; Comms<span class="hint">One per line: Label | Value</span></label>
+      <textarea id="fComms" placeholder="Support Email | support@example.com"></textarea>
+    </div>
+
+    <div class="field-block">
+      <label>Footer Line</label>
+      <input type="text" id="fFooter">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary" id="modalSave">Save Project</button>
+    </div>
+  </div>
+</div>
+<div class="save-flash" id="saveFlash">Project saved</div>
+
+<script>
+const DATA = {
+  chem: {
+    name: "AlchemI &amp; ChemLink Managed Services",
+    client: "Chemonics International",
+    sowRef: "SOW 2025-S03-AlchemI-ChemLink-ManagedServices_v2.0",
+    sub: "Quick-reference for scope, SLAs, staffing, pricing, and escalation — pulled from SOW 2025-S03. Infrastructure/Platform/Application support for ChemLink 2.0 (Legacy), ChemLink 3.0 (SaaS, deployed within AlchemI), and AlchemI infrastructure.",
+    facts1: [["Client","Chemonics International"],["Contractor","Nmblr, Inc."],["Effective Date","Jul 21, 2026"],["Period of Performance","Jul 15, 2026 – Jan 15, 2027"]],
+    status: "active",
+    facts2: [["Incident Mgmt Hours","24×7"],["Service Request Hours","8×5"],["Delivery Location","Offsite"],["Tier Model","L1 / L2 / L3"],["Ticketing Tool","Jira"]],
+    scopeDesc: "External SaaS customer operations are excluded; ChemLink 3.0 is deployed within the AlchemI environment.",
+    scopeCards: [
+      {t:"Infrastructure &amp; Platform", d:"AWS infrastructure for ChemLink 2.0/3.0 and AlchemI; EC2, security groups, IAM roles across all environments; Neo4j graph database integration &amp; management; cost monitoring, weekly reporting, optimization recommendations."},
+      {t:"Application Support", d:"Bug fixing, minimal feature enhancements, patches, and minor version upgrades for ChemLink 2.0 &amp; 3.0; performance monitoring/tuning; Digital Process Outsourcing (DPO) support for ChemLink 2.0 users.", thresh:"Effort cap: ≤ 20 man-hours per activity"},
+      {t:"Proactive Monitoring", d:"3-hour interval manual + automated health checks on all endpoints; AWS CloudWatch/SNS real-time alerting; website SSL certificate monitoring &amp; renewal."},
+      {t:"AlchemI Infrastructure Mgmt", d:"Full AWS monitoring &amp; deployment lifecycle for AlchemI AI infra; CI/CD pipeline maintenance; dev/staging/prod environment management; DR monitoring, annual DR test, periodic backup restoration test."},
+      {t:"Security &amp; Vulnerability Mgmt", d:"Quarterly network vulnerability scans; semi-annual app code security scans; remediation; hardening recommendations; proactive threat monitoring; AWS KMS key rotation; antivirus mgmt with tamper protection."},
+    ],
+    oos: [
+      ["a","Third-Party Platforms","Vendor-level fixes/issues on AWS, Neo4j, Mailgun, etc. — beyond config/integration/usage.","Vendor responsibility"],
+      ["b","Major Enhancements &amp; Upgrades","Anything exceeding minor updates (&gt;20 hrs or material impact).","Change Order"],
+      ["c","Migration &amp; Re-Platforming","Data/system migration or re-platforming outside routine maintenance.","Impact assessment + Change Request"],
+      ["d","Material Infra &amp; Config Changes","New nodes, topology changes, major stack updates, new services/dependencies.","Change Request"],
+      ["e","Data Architecture Redesign","Redesign of data architecture/models/warehouse beyond routine work.","Change Request"],
+      ["f","SaaS Customer Operations","Tenant management, customer-facing SLAs, onboarding for CLIENT's external SaaS customers.","Separate amendment"],
+      ["g","Third-Party Security Testing","Penetration testing and related third-party assessments, incl. coordination/cost.","Separate engagement / Change Order"],
+      ["h","Enhancements &amp; Feature Development","New features or material capability changes beyond minor updates.","Change Order / separate agreement"],
+    ],
+    slaDesc: "SLAs apply 60 days after Transition completes and NMBLR holds full service responsibility; measured monthly thereafter, reviewed quarterly.",
+    sla: [
+      ["p1","P1","Incident Response","30 min","—","90%"],
+      ["p2","P2","Incident Response","1 hr","—","90%"],
+      ["p3","P3","Incident Response / Resolution","4 hrs","12 hrs","90%"],
+      ["p4","P4","Incident Response / Resolution","8 hrs","24 hrs","90%"],
+      ["all","ALL","Service Request — Response","1 business day","—","90%"],
+      ["p1","P1/2","Service Request — Fulfilment","—","1 business day","90%"],
+      ["p3","P3","Service Request — Fulfilment","—","2 business days","90%"],
+      ["p4","P4","Service Request — Fulfilment","—","3 business days","90%"],
+      ["all","ALL","First Contact Resolution","—","—","70%"],
+      ["all","ALL","Customer Satisfaction (≥8/10)","—","—","90%"],
+      ["all","ALL","Contact Re-Call (max, lower is better)","—","—","&lt;10%"],
+    ],
+    slaNote: "<strong>SLA credit methodology</strong><ul><li>Credits apply only to Critical Service Level (CSL) defaults — KPI defaults don't generate credit.</li><li>Max monthly credit: 8% of monthly charges. 100 SLA points total, no single SLA above 30 points.</li><li>Multiple defaults on one ticket → only the highest-point SLA default counts.</li><li>Credit % = (points in default ÷ 100) × 8% × Monthly Charges. Reviewed quarterly.</li></ul>",
+    tiersDesc: "P1/P2 escalate straight to L3 with Leads informed; P3/P4 escalate to L2.",
+    tiersHeading: "Support Tiers &amp; Escalation",
+    staffCol1: "Tier",
+    escalation: [
+      ["Entry","Client / Internal SPOC","—"],["L1","MS Support","24×7 ack &amp; monitoring"],["L2","MS Support","8×5"],
+      ["L3","MS Support","8×5 excl. PH holidays"],["Leads","TechOps Leads","8×5, 24×7 on P1/P2"],["Top","Project Team / Mgmt","8×5, 24×7 on P1/P2"],
+    ],
+    staff: [
+      ["L1 MS Support","1","First-line: acknowledges &amp; dispatches tickets, resolves known issues, end-user operation issues."],
+      ["L2 MS Support","1","Complex issues L1 can't resolve; system-configuration access; infra issues; change requests."],
+      ["L3 MS Support","1","Expert-level for critical/unknown issues; platform changes (WAF, access mgmt); knowledge base."],
+    ],
+    pricing: [
+      ["Managed Service Fees","Stays unchanged through ChemLink 2.0 decommissioning",null,"Recurring, implied monthly"],
+      ["Core Infrastructure &amp; Tools budget","Same decommissioning clause as above",null,"Recurring, implied monthly"],
+      ["Additional Jira seats","2 seats included in base MS contract","$25 / account / mo","Per seat, per month"],
+      ["Minor change (≤20 man-hrs)","Documentation required","No added cost","Included in base fee"],
+      ["Major change (&gt;20 man-hrs)","Migrations, re-platforming, new features","Development SOW rates","T&amp;M via Change Order"],
+      ["SLA credit exposure","Not a fee — a deduction risk","Max 8% of monthly charge","Per SLA point methodology"],
+    ],
+    comms: [
+      ["Support Email","amihan_seg@agsx.net"],["Support Phone","09173035992"],
+      ["Service Review","Monthly — uptime, incident count, avg. resolution lead time by category"],
+      ["Ad Hoc Comms","On-demand: Google Chat / Viber / WhatsApp / Teams (client's choice)"],
+      ["Ticketing Tool","Jira — 2 seats included, $25/seat/mo beyond that"],
+      ["Knowledge Transfer","Data Gathering → Playbook → Schedule KT → Reverse Shadow → Turnover Acceptance"],
+    ],
+    footer: "SOW 2025-S03-AlchemI-ChemLink-ManagedServices_v2.0 · Effective Jul 21, 2026 · Chemonics International, Inc. ⇄ Nmblr, Inc. · Private &amp; Confidential",
+  },
+
+  talino: {
+    name: "Talino E-KYC Platform Subscription",
+    client: "BDO Unibank",
+    sowRef: "SOW 2023-6",
+    sub: "Maintenance &amp; Support subscription for the Talino Platform (E-KYC) underlying the Kabayan Account Opening application. Three-line support model, Clickup-based ticketing, quarterly-upfront billing.",
+    facts1: [["Client","BDO Unibank, Inc."],["Contractor","Amihan Global Strategies Phils. Inc."],["Effective Date","Blank in signed template"],["Term","1 yr from Start Date, renewable"]],
+    status: "active",
+    facts2: [["Start Trigger","Upon signing SOW 2023-2 (Kabayan Phase 1)"],["Subscription Term","1 yr from Jun 1, 2023"],["Delivery Location","Remote (Amihan office)"],["Tier Model","3 lines: TBG / Amihan / Amihan"],["Ticketing Tool","Clickup"]],
+    scopeDesc: "Subscription covers the hosted Talino Platform plus updates/upgrades, monthly reporting, and a 3-line support model.",
+    scopeCards: [
+      {t:"Solution Features", d:"Customer Onboarding Web App, eKYC Orchestration (via Veriff — liveness check, ID fraud verification, face matching, sanctions/negative DB screening), Virtual Teller Processing App, Artifact Storage, SMS Facility (via Infobip), Geographic Fencing."},
+      {t:"Updates &amp; Upgrades", d:"Enhanced functions, new modules, new versions — included at no additional cost. Scheduled maintenance planned &amp; communicated if downtime required."},
+      {t:"Monthly Reports", d:"Service Availability Report (uptime, outages, downtime) and Customer Support Report (requests, status, response/resolution time), submitted first week of each month."},
+      {t:"3-Line Support Model", d:"L1 (BDO's Business Unit/TBG): end-user training, admin, confident-to-resolve issues. L2 (Amihan): Clickup registration + initial analysis, non-complex DB issues. L3 (Amihan): code changes / complex DB fixes."},
+      {t:"Access Channels", d:"Progressive Web App (Chrome 88+/Firefox 109+/Safari 15.6.1+/Edge 108+) for Users; System Endpoints/APIs for BDO personnel during artifact/data download."},
+    ],
+    oos: [
+      ["a","Scheduled Maintenance","Unavailability during a planned, communicated maintenance window is excluded from response/resolution time calcs.","N/A — planned downtime"],
+      ["b","BDO/User-Caused Delays","Delays caused solely by BDO or the User failing to provide necessary information are excluded from SLA calcs.","N/A"],
+    ],
+    slaDesc: "No numeric compliance % is stated in this SOW for any priority — only Response/Resolution time targets and a 24/7 (P1/P2) vs 8×5 (P3/P4) schedule.",
+    sla: [
+      ["p1","P1","Urgent — Response","1 hr (Clickup + Hotline)","—","Not stated"],
+      ["p1","P1","Urgent — Resolution","—","4 calendar hrs","Not stated"],
+      ["p2","P2","Major — Response","1 hr","—","Not stated"],
+      ["p2","P2","Major — Resolution","—","8 calendar hrs","Not stated"],
+      ["p3","P3","Minor — Response","1 hr","—","Not stated"],
+      ["p3","P3","Minor — Resolution","—","24 business hrs","Not stated"],
+      ["p4","P4","Trivial (Service Request) — Response","1 hr","—","Not stated"],
+      ["p4","P4","Trivial (Service Request) — Resolution","—","40 business hrs","Not stated"],
+    ],
+    slaNote: "<strong>Schedule &amp; resolution notes</strong><ul><li>P1/P2 run on a 24/7 schedule; P3/P4 run 8×5.</li><li>&quot;Resolution Assessment&quot; — final resolution is subject to agreement with the Client for every priority level.</li><li>Any issue reported by phone/email/chat must ALSO be logged in Clickup by BDO.</li></ul>",
+    tiersDesc: "Code-related issues registered at L2 auto-escalate to L3.",
+    tiersHeading: "Support Lines &amp; Escalation",
+    staffCol1: "Line",
+    escalation: [
+      ["1st Line","Business Unit (TBG)","BDO-side staff"],["2nd Line","Amihan","Clickup + initial analysis"],["3rd Line","Amihan","Code / complex DB fixes"],
+    ],
+    staff: [
+      ["1st Line — TBG (BDO)","Not specified","Direct support to end users/public; resolves training, admin, and IT-confident issues."],
+      ["2nd Line — Amihan","Not specified","Registers Issue on Clickup, initial analysis, classifies DB vs. code; resolves non-complex DB issues."],
+      ["3rd Line — Amihan","Not specified","Handles Issues requiring code changes or complex database fixes, directly."],
+    ],
+    pricing: [
+      ["Subscription Fee", "Includes support + cloud hosting services", null, "Quarterly, invoiced upfront"],
+      ["Finops Support (Appendix 1: Investment)", "4 quarters × $18,000", "$18,000 / quarter ($72,000 total/yr)", "Quarterly"],
+      ["Payment terms", "BDO has 30 working days to dispute an invoice/line item", "Net 30 days", "Per undisputed Complete Invoice"],
+    ],
+    comms: [
+      ["Escalation Path","1st Line (TBG) → 2nd Line (Amihan) → 3rd Line (Amihan)"],
+      ["Reporting Requirement","Any issue reported by phone/email/chat must also be logged in Clickup."],
+      ["Info Needed to Report","Example of where/when the Issue occurred, related input/output listing, written explanation."],
+      ["Reports Cadence","Monthly — Service Availability Report + Customer Support Report, first week of month."],
+      ["Ticketing Tool","Clickup"],
+    ],
+    footer: "SOW 2023-6 · Talino E-KYC Platform Subscription (Maintenance &amp; Support) · BDO Unibank, Inc. ⇄ Amihan Global Strategies Phils. Inc.",
+  },
+
+  rpts: {
+    name: "Related Party Transaction System (RPTS) M&amp;S",
+    client: "BDO Unibank",
+    sowRef: "SOW 2023-8 · Project ID PRJ0010338",
+    sub: "Maintenance &amp; Support for the RPTS Upgrade solution, deployed in BDO's OpenShift Container Platform (OCP). Richest SLA structure of the four SOWs: Response, Resolution, Root Cause Identification, and Permanent Fix, each individually penalized.",
+    facts1: [["Client","BDO Unibank, Inc."],["Contractor","Amihan Global Strategies Phils. Inc."],["Effective Date","Upon COCA for RPTS Upgrade SOW"],["Term","12 months from Effective Date"]],
+    status: "active",
+    facts2: [["Core Hours","8:30AM–5:30PM Manila, M–F"],["On-Call","24/7 for P1/P2 off-hours/holidays/critical periods"],["Delivery Location","Remote or onsite as needed"],["Tier Model","Amihan SEG: L1 / L2 / L3"],["Ticketing Tool","JIRA Service Desk"]],
+    scopeDesc: "SERVICE PROVIDER (SEG) covers incident/problem management, preventive maintenance, upgrade support, OCP-lifecycle compatibility, DR support, and monthly service reviews.",
+    scopeCards: [
+      {t:"Incident &amp; Problem Management", d:"Correct/resolve/repair malfunctions, defects, nonconformities at no added charge; Neo4j (3rd-party graph DB) operational + break-fix support; root-cause-focused problem management; inquiries &amp; service requests incl. operational growth support."},
+      {t:"Preventive Maintenance", d:"Keep Solution updated with latest tech/market practices, compatible with OCP lifecycle; load/version/patch assessment.", thresh:"RPTS Solution: bi-annual · OCP: quarterly"},
+      {t:"Software Upgrade Maintenance", d:"Upgrades assessed &amp; approved by BDO before COR. Minor impact: no added cost. Major impact: execution/cost via COR, but ongoing M&amp;S stays under this SOW at no added cost.", thresh:"Major/minor threshold: 20 man-hours"},
+      {t:"OCP Upgrade Support", d:"Ensure Solution keeps functioning through OpenShift Container Platform updates; monitor OCP lifecycle/Red Hat roadmap; BDO coordinates ≥2 weeks ahead of OCP upgrades."},
+      {t:"Transition, Training &amp; DR", d:"Knowledge transfer/training for updates; up-to-date Troubleshooting &amp; Installation Guides; annual DR test support (backup + recovery); Monthly Service Reviews."},
+    ],
+    oos: [
+      ["a","Infra &amp; Platform (unlisted)","Hardware/network/OS issues, or OpenShift/platform components not listed in Section 2.2.","N/A — BDO/OCP owner responsibility"],
+      ["b","PM, Dev Work &amp; Unrelated Support","Project management, development work, or support unrelated to the Solution.","Change Order to add scope"],
+      ["c","Licenses &amp; Infra Costs","Licenses and infrastructure resources needed to operate the Solution.","N/A — BDO's account"],
+      ["d","Consultancy Services","SERVICE PROVIDER shall not provide consultancy services under this SOW.","N/A"],
+      ["e","Managed Services / Consultancy (general)","Broader managed services/consultancy beyond this specific M&amp;S scope.","Separate SOW / engagement"],
+    ],
+    slaDesc: "Four-stage SLA per priority — Response, Resolution, Root Cause Identification, Permanent Fix — each with its own compliance % and penalty % of the monthly service fee.",
+    sla: [
+      ["p1","P1","Response","15 min","—","98% (1%)"],
+      ["p1","P1","Resolution","—","4 hrs (no cutoff)","98% (1%)"],
+      ["p1","P1","Root Cause Identification","—","5 working days","95% (1%)"],
+      ["p1","P1","Permanent Fix","—","5 days after RCA acceptance","95% (1%) — 4% total"],
+      ["p2","P2","Response","15 min","—","98% (1%)"],
+      ["p2","P2","Resolution","—","1 business day after ticket received","98% (1%)"],
+      ["p2","P2","Root Cause Identification","—","10 working days","90% (1%)"],
+      ["p2","P2","Permanent Fix","—","10 days after RCA acceptance","90% (1%) — 4% total"],
+      ["p3","P3","Response","1 hr","—","95% (1%)"],
+      ["p3","P3","Resolution","—","3 business days (8:30-5:30 M-F)","95% (1%) — 2% total"],
+      ["p3","P3","Root Cause Identification","—","15 working days","90% (0%)"],
+      ["p3","P3","Permanent Fix","—","20 days after RCA acceptance","90% (0%)"],
+      ["p4","P4","Response (Service Request)","1 business day","—","95% (0%)"],
+      ["p4","P4","Resolution","—","5 working days or mutually agreed","95% (0%)"],
+      ["p4","P4","Root Cause Identification","—","20 working days","90% (0%)"],
+      ["p4","P4","Permanent Fix","—","New Product Release","90% (0%) — 0% total"],
+    ],
+    slaNote: "<strong>Penalty structure</strong><ul><li>Each stage/priority combination carries its own penalty % of the monthly service fee (shown in parentheses in the Committed column).</li><li>Category totals: P1 4% · P2 4% · P3 2% · P4 0% — 10% max total across all categories per the SOW's summary row.</li><li>SLA clock excludes: BDO-caused delays, and — for Neo4j-dependent issues — time attributable to the third-party tool once escalated.</li></ul>",
+    tiersDesc: "Amihan SEG (Sustained Engineering Group) handles all three tiers; only application-related issues are covered — infrastructure/platform issues escalate to BDO.",
+    tiersHeading: "Support Tiers &amp; Escalation",
+    staffCol1: "Tier",
+    escalation: [
+      ["Entry","Client SPOC","—"],["L1/L2","Amihan MS","amihan_seg@agsx.net"],["L3","Amihan Application","bventura@agsx.net"],["Lead","Amihan MS Lead","mtibis@agsx.net"],
+    ],
+    staff: [
+      ["L1 Support (SEG)","Not separately quantified","24/7 acknowledgement; dispatches tickets; solves common issues via customer KB."],
+      ["L2 Support (SEG)","Not separately quantified","Application-related issues only (infra/platform escalated to BDO); change order requests; updates KB."],
+      ["L3 Support (SEG)","Not separately quantified","Expert-level, application-related only; change order requests; updates KB."],
+    ],
+    pricing: [
+      ["Service Fee", "Fixed + VAT-inclusive", null, "Per relevant PO/JO"],
+      ["Invoice 1 — 90%", "Full SOW execution + COCA (post 60-day warranty) + PO/JO", "90% of total", "Milestone-based"],
+      ["Invoice 2 — 10%", "COCA confirming completion of all Services", "10% of total", "Milestone-based"],
+      ["Payment terms", "VAT for BDO's account; other taxes for SERVICE PROVIDER's account", "Net 30 days", "Per undisputed Complete Invoice"],
+    ],
+    comms: [
+      ["Escalation Path","Client SPOC → Amihan MS L1/L2 (amihan_seg@agsx.net) → Amihan Application L3 (bventura@agsx.net, 09064942497) → Amihan MS Lead (mtibis@agsx.net, 09997188662)"],
+      ["Governance Forums","Adhoc Meeting, Service Review Meeting, Incident/Problem RCA Investigation — BDO-AIO-CBD-Business Support &amp; Enterprise + Amihan L3 (and SEG Leads for Service Review)."],
+      ["Ticketing Tool","JIRA Service Desk — all ticket creation, escalation, monitoring, closing, documentation."],
+      ["Support Non-Compete","Resources assigned to BDO are not shared with any competing client of SERVICE PROVIDER."],
+      ["Data Outsourcing","Personal Data Processing per Outsourcing Agreement Supplement — RA 10173 compliance, 24-hr breach notification, no subcontracting without written consent."],
+    ],
+    footer: "SOW 2023-8 · RPTS Maintenance &amp; Support · Project ID PRJ0010338 · BDO Unibank, Inc. ⇄ Amihan Global Strategies Phils. Inc.",
+  },
+
+  sme: {
+    name: "SME Loans OAO Customization &amp; Support",
+    client: "BDO Network Bank",
+    sowRef: "BDO NB SOW 2025-1 · Project ID PRJ0012296",
+    sub: "Software customization of the SME Loan OAO application, hosted within the Talino Platform subscription of BDO Unibank–Remittance, followed by a 1-year post-warranty Maintenance &amp; Support subscription.",
+    facts1: [["Client","BDO Network Bank, Inc. (BDONB)"],["Contractor","Amihan Global Strategies Phils. Inc."],["Effective Date","Date SOW is signed (not yet dated)"],["Term","4 months from Effective Date, or completion — later of the two"]],
+    status: "inactive",
+    facts2: [["SLA Basis","Business hours (not stated as 24×7)"],["Delivery Team","3.7 FTE, all Remote Onshore"],["Third-Party Platform","Talino Ventures P.B.C Labs"],["Post-Warranty","1-yr Maintenance &amp; Support subscription"],["Support Contact","nb.bdo.techops@nmblr.ai"]],
+    scopeDesc: "Functional customization/testing/support per Appendix 1, hosted within the Talino Platform, plus a 1-year M&amp;S subscription once Stabilization &amp; Warranty completes.",
+    scopeCards: [
+      {t:"Functional Scope", d:"Mobile number input, T&amp;C/privacy acceptance, SMS OTP, basic info capture, agent assignment (QR or selection), document upload/photo capture &amp; labeling, resume application on re-entered number, document generation (≤5MB), geographic/agent-code based storage, agent list w/ codes &amp; territories, 7-day data purge."},
+      {t:"Non-Functional Scope", d:"Same NFRs as SOW 2023-2 (Kabayan OAO Customization) — capacity, performance, security, supportability — delivered within the fixed fee."},
+      {t:"Integration", d:"Integration with existing BDO applications and third-party systems: DNS services via Akamai."},
+      {t:"Testing", d:"SERVICE PROVIDER: Unit, Functional, SIT, Regression, Non-Functional/Performance Testing. BDONB: UAT execution. SERVICE PROVIDER supports/fixes defects per SLA."},
+      {t:"Deployment, Training &amp; Support", d:"Deployment + Stabilization/Warranty support per SLA; train-the-trainer approach, 1 batch via MS Teams; materials provided."},
+      {t:"Post-Warranty Subscription", d:"1 calendar year of Maintenance &amp; Support, invoiced 100% upon completion of Stabilization &amp; Warranty.", thresh:"Follow-on scope/SLA presumed to mirror sibling BDO SOWs — confirm"},
+    ],
+    oos: [
+      ["a","Back-Office Interface","Back-office interface is excluded from scope.","Change Order / separate scoping"],
+      ["b","Provision of URL for BDONB","Provision of a URL for BDONB is excluded from scope.","Change Order / separate scoping"],
+      ["c","Agent Self-Service","Creating/updating/deleting agents is backend-only via support request — no self-service UI.","Support request (included)"],
+      ["d","SFTP Folder Logic Changes","Modifications to the agreed SFTP folder organization logic (merging/splitting, hierarchy changes).","Change Order"],
+    ],
+    slaDesc: "Two SLA sets apply: a 'Solution Malfunction' SLA (Priority 1–3, business hours) for live support, and a separate Non-Production Defect SLA (Severity 1–4) used during build/testing.",
+    sla: [
+      ["p1","P1","Critical — Response","1 business hr","—","Not stated"],
+      ["p1","P1","Critical — Resolution","—","4 business hrs","Not stated"],
+      ["p2","P2","Medium — Response","1 business hr","—","Not stated"],
+      ["p2","P2","Medium — Resolution","—","8 business hrs","Not stated"],
+      ["p3","P3","Low — Response","1 business hr","—","Not stated"],
+      ["p3","P3","Low — Resolution","—","40 business hrs","Not stated"],
+      ["p1","Sev.1","Non-Prod Defect","ASAP from ack.","4 hr ETA; fix in 2-3 days (incl. weekends)","Not stated"],
+      ["p2","Sev.2","Non-Prod Defect","Investigated within 4 hrs","8 hr ETA; fix in 3-4 days","Not stated"],
+      ["p3","Sev.3","Non-Prod Defect","Investigated same day","Fix within the week (or as advised)","Not stated"],
+      ["p4","Sev.4","Non-Prod Defect (cosmetic)","Investigated same day","Fix within the week (or as advised)","Not stated"],
+    ],
+    slaNote: "<strong>Warranty &amp; escalation notes</strong><ul><li>Warranty: 30 days from Go-Live, no additional cost; RCA document due within 2 business days after resolution.</li><li>P1 Critical: RCA/permanent resolution advised every 2 hrs until resolved. P2 Medium: advised daily.</li><li>Non-Production Defect SLA governs build/testing-phase defects, separate from live-support SLA above.</li></ul>",
+    tiersDesc: "During build: a dedicated delivery team. Post-warranty: a TechOps-led support escalation chain.",
+    tiersHeading: "Delivery Team &amp; Escalation",
+    staffCol1: "Role",
+    escalation: [
+      ["Entry","TechOps","nb.bdo.techops@nmblr.ai"],["Escalate","Account Manager","Miguel Rosit"],["Top","Head of Engineering","Dexter Genterone"],
+    ],
+    staff: [
+      ["Project Manager","0.5","Ensures the Project is on track; aligns with overall IT stakeholders and development team."],
+      ["Product Manager","0.5","Works with BDO/BDONB Business Unit head and sponsors to align design/operations to business requirements."],
+      ["Full Stack Developer","2","Develops the solution defined in scope — front-end and back-end."],
+      ["UI/UX Designer","0.1","Designs the look/feel, flow, and overall experience."],
+      ["DevOps Engineer","0.1","Deploys and manages the infrastructure."],
+      ["Quality Assurance Engineer","0.5","Ensures real-time and milestone product testing/acceptance."],
+    ],
+    pricing: [
+      ["Service Fees (customization + support)", "Fixed, inclusive of all project expenses; hardware/software licenses NOT covered", null, "Per corresponding PO/JO"],
+      ["Milestone: Contract Signing", "Upon signing SOW", "10% of one-time fees", "One-time"],
+      ["Milestone: Requirements Signoff", "Upon Requirements phase + COCA", "20% of one-time fees", "One-time"],
+      ["Milestone: Completion to UAT", "Upon Acceptance Testing phase + COCA", "30% of one-time fees", "One-time"],
+      ["Milestone: Completion of Deployment", "Upon Deployment phase + COCA", "30% of one-time fees", "One-time"],
+      ["Milestone: Completion of Warranty", "Upon Stabilization &amp; Warranty phase + COCA", "10% of one-time fees", "One-time"],
+      ["Subscription: M&amp;S (1 calendar year)", "Upon completion of Stabilization &amp; Warranty", "100% of subscription fee", "Separate from one-time fees"],
+    ],
+    comms: [
+      ["Escalation Path","TechOps (nb.bdo.techops@nmblr.ai) → Miguel Rosit, Account Manager (mrosit@nmblr.ai, +63 917 3200 554) → Dexter Genterone, Head of Engineering (dgenterone@nmblr.ai, +63 908 628 4408)"],
+      ["Governance","Steering Committee with BDO, BDONB, and SERVICE PROVIDER reps — critical decisions, oversight, escalation, leadership comms. Regular meetings."],
+      ["Change Control","Project Change Request (PCR) — written, signed by both parties; 15 calendar days' notice before effectivity."],
+      ["Invoicing Contact","Ms. Niezl D. Gilvero, Comptrollership Dept.; cc Ms. Hiyas Lea C. Pagaduan"],
+      ["Third-Party Partner","Talino Ventures P.B.C Labs — provider of the Talino Platform on which the solution is hosted."],
+    ],
+    footer: "BDO NB SOW 2025-1 · SME Loans OAO Customization &amp; Support · Project ID PRJ0012296 · BDO Network Bank, Inc. ⇄ Amihan Global Strategies Phils. Inc.",
+  },
+};
+
+const ORDER = ["chem","talino","rpts","sme"];
+let current = "chem";
+
+function el(html){ const t=document.createElement('template'); t.innerHTML=html.trim(); return t.content.firstChild; }
+
+function renderSwitcher(){
+  const box = document.getElementById('projSwitch');
+  box.innerHTML = '<div class="proj-label">Project</div>';
+  ORDER.forEach(key=>{
+    const d = DATA[key];
+    const row = el(`<div class="proj-btn-row"></div>`);
+    const isActive = d.status !== 'inactive';
+    const btn = el(`<button class="proj-btn ${key===current?'active':''} ${isActive?'':'inactive'}" data-key="${key}">
+      <span class="pname">${d.name}</span>
+      <span class="pclient-row"><span class="sw-dot ${isActive?'active':''}"></span><span class="pclient">${d.client}</span></span>
+    </button>`);
+    btn.addEventListener('click', ()=>{ current = key; renderAll(); });
+    row.appendChild(btn);
+    if (d._custom){
+      const del = el(`<button class="del-btn" title="Remove this project" aria-label="Remove ${d.name}">&times;</button>`);
+      del.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        if (!confirm(`Remove "${d.name}" from the tracker?`)) return;
+        delete DATA[key];
+        ORDER.splice(ORDER.indexOf(key), 1);
+        if (current === key) current = ORDER[0];
+        saveCustomProjects();
+        renderAll();
+      });
+      row.appendChild(del);
+    }
+    box.appendChild(row);
+  });
+}
+
+/* ---------- Storage adapter: Claude artifact storage, falls back to localStorage ---------- */
+async function storageGet(key){
+  if (typeof window.storage !== 'undefined' && window.storage){
+    try{
+      const r = await window.storage.get(key, false);
+      return r ? r.value : null;
+    } catch(e){ /* key not found or storage unavailable — fall through */ }
+  }
+  try{ return localStorage.getItem(key); } catch(e){ return null; }
+}
+async function storageSet(key, value){
+  if (typeof window.storage !== 'undefined' && window.storage){
+    try{ await window.storage.set(key, value, false); return; } catch(e){ /* fall through */ }
+  }
+  try{ localStorage.setItem(key, value); } catch(e){ /* ignore — no persistence available */ }
+}
+
+/* ---------- Add Project: storage + parsing ---------- */
+const STORAGE_KEY = 'custom-projects';
+const STATUS_KEY = 'project-status';
+
+async function loadStatusOverrides(){
+  const raw = await storageGet(STATUS_KEY);
+  if (raw){
+    try{
+      const map = JSON.parse(raw);
+      Object.keys(map).forEach(key => { if (DATA[key]) DATA[key].status = map[key]; });
+    } catch(e){ /* ignore malformed data */ }
+  }
+}
+
+async function saveStatusOverrides(){
+  const map = {};
+  ORDER.forEach(key => { if (DATA[key]) map[key] = DATA[key].status === 'inactive' ? 'inactive' : 'active'; });
+  await storageSet(STATUS_KEY, JSON.stringify(map));
+}
+
+document.getElementById('statusToggle').addEventListener('click', async ()=>{
+  const d = DATA[current];
+  d.status = (d.status === 'inactive') ? 'active' : 'inactive';
+  await saveStatusOverrides();
+  renderAll();
+  flashSaved(`${d.name} marked ${d.status === 'inactive' ? 'Inactive' : 'Active'}`);
+});
+
+function parseLines(raw){
+  return raw.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>l.split('|').map(s=>s.trim()));
+}
+function slugify(name){
+  return 'custom-' + name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') + '-' + Date.now().toString(36);
+}
+function notesToList(raw){
+  const items = raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  if (!items.length) return '';
+  return '<strong>Notes</strong><ul>' + items.map(i=>`<li>${i}</li>`).join('') + '</ul>';
+}
+
+async function loadCustomProjects(){
+  const raw = await storageGet(STORAGE_KEY);
+  if (raw){
+    try{
+      const arr = JSON.parse(raw);
+      arr.forEach(p=>{ DATA[p.key] = p.data; if (!ORDER.includes(p.key)) ORDER.push(p.key); });
+    } catch(e){ /* ignore malformed data */ }
+  }
+}
+
+async function saveCustomProjects(){
+  const customs = ORDER.filter(k => DATA[k] && DATA[k]._custom).map(k => ({ key:k, data:DATA[k] }));
+  await storageSet(STORAGE_KEY, JSON.stringify(customs));
+}
+
+function flashSaved(msg){
+  const f = document.getElementById('saveFlash');
+  f.textContent = msg;
+  f.classList.add('show');
+  setTimeout(()=>f.classList.remove('show'), 1800);
+}
+
+function openModal(){ document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); }
+
+function buildProjectFromForm(){
+  const v = id => document.getElementById(id).value.trim();
+  const name = v('fName') || 'Untitled Project';
+  const client = v('fClient') || 'Unnamed Client';
+
+  const scopeCards = parseLines(v('fScopeCards')).map(f => ({ t:f[0]||'', d:f[1]||'', thresh:f[2]||undefined }));
+  const oos = parseLines(v('fOos')).map(f => [f[0]||'', f[1]||'', f[2]||'', f[3]||'']);
+  const sla = parseLines(v('fSla')).map(f => [f[0]||'all', f[1]||'', f[2]||'', f[3]||'—', f[4]||'—', f[5]||'Not stated']);
+  const escalation = parseLines(v('fEscalation')).map(f => [f[0]||'', f[1]||'', f[2]||'']);
+  const staff = parseLines(v('fStaff')).map(f => [f[0]||'', f[1]||'', f[2]||'']);
+  const pricing = parseLines(v('fPricing')).map(f => [f[0]||'', f[1]||'', f[2] ? f[2] : null, f[3]||'']);
+  const comms = parseLines(v('fComms')).map(f => [f[0]||'', f[1]||'']);
+  const facts1 = parseLines(v('fFacts1')).map(f => [f[0]||'', f[1]||'']);
+  const facts2 = parseLines(v('fFacts2')).map(f => [f[0]||'', f[1]||'']);
+
+  return {
+    _custom: true,
+    name, client,
+    status: v('fStatus') || 'active',
+    sowRef: v('fSowRef') || 'Not specified',
+    sub: v('fSub') || '',
+    facts1: facts1.length ? facts1 : [["Client", client]],
+    facts2: facts2.length ? facts2 : [["Contractor", v('fContractor')||'Not specified']],
+    scopeDesc: v('fScopeDesc') || '',
+    scopeCards: scopeCards.length ? scopeCards : [{t:"Scope", d:"Not yet detailed."}],
+    oos: oos.length ? oos : [["a","Not yet detailed","",""]],
+    slaDesc: v('fSlaDesc') || '',
+    sla: sla.length ? sla : [["all","—","Not yet detailed","—","—","Not stated"]],
+    slaNote: notesToList(v('fSlaNote')),
+    tiersHeading: v('fTiersHeading') || 'Support Tiers &amp; Escalation',
+    tiersDesc: v('fTiersDesc') || '',
+    staffCol1: v('fStaffCol1') || 'Tier',
+    escalation: escalation.length ? escalation : [["Entry","Not yet detailed","—"]],
+    staff: staff.length ? staff : [["Not yet detailed","",""]],
+    pricing: pricing.length ? pricing : [["Not yet detailed","",null,""]],
+    comms: comms.length ? comms : [["Contact","Not yet detailed"]],
+    footer: v('fFooter') || `${v('fSowRef')||''} · ${name} · ${client} ⇄ ${v('fContractor')||'Contractor'}`,
+  };
+}
+
+function clearForm(){
+  ['fName','fClient','fSowRef','fContractor','fSub','fFacts1','fFacts2','fScopeDesc','fScopeCards',
+   'fOos','fSlaDesc','fSla','fSlaNote','fTiersHeading','fTiersDesc','fStaffCol1','fEscalation',
+   'fStaff','fPricing','fComms','fFooter'].forEach(id => { document.getElementById(id).value=''; });
+  document.getElementById('fStatus').value = 'active';
+}
+
+document.getElementById('addProjBtn').addEventListener('click', openModal);
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalCancel').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', (e)=>{ if (e.target.id === 'modalOverlay') closeModal(); });
+document.getElementById('modalSave').addEventListener('click', async ()=>{
+  const nameField = document.getElementById('fName');
+  if (!nameField.value.trim()){ nameField.focus(); return; }
+  const proj = buildProjectFromForm();
+  const key = slugify(proj.name);
+  DATA[key] = proj;
+  ORDER.push(key);
+  current = key;
+  await saveCustomProjects();
+  clearForm();
+  closeModal();
+  renderAll();
+  flashSaved(`"${proj.name}" saved`);
+});
+
+function factRow(container, facts){
+  container.innerHTML = facts.map(([k,v])=>`<div class="fact"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+}
+
+function renderAll(){
+  const d = DATA[current];
+  document.getElementById('hTitle').innerHTML = d.name;
+  document.getElementById('hSub').innerHTML = d.sub;
+  const toggle = document.getElementById('statusToggle');
+  const isActive = d.status !== 'inactive';
+  toggle.classList.toggle('active', isActive);
+  toggle.classList.toggle('inactive', !isActive);
+  document.getElementById('statusText').textContent = isActive ? 'Active' : 'Inactive';
+  factRow(document.getElementById('factsRow1'), d.facts1);
+  factRow(document.getElementById('factsRow2'), d.facts2);
+
+  document.getElementById('scopeDesc').innerHTML = d.scopeDesc;
+  document.getElementById('scopeCards').innerHTML = d.scopeCards.map(c=>`
+    <div class="card"><h3>${c.t}</h3><p>${c.d}</p>${c.thresh?`<div class="thresh">${c.thresh}</div>`:''}</div>
+  `).join('');
+
+  document.getElementById('oosList').innerHTML = d.oos.map(([letter,item,desc,path])=>`
+    <div class="oos-row">
+      <span class="oos-letter">${letter}</span>
+      <span class="oos-item">${item}</span>
+      <span class="oos-desc">${desc}</span>
+      <span class="oos-path">${path}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('slaDesc').innerHTML = d.slaDesc;
+  document.getElementById('slaBody').innerHTML = d.sla.map(([cls,prio,name,resp,res,committed])=>`
+    <tr>
+      <td><span class="prio ${cls}">${prio}</span></td>
+      <td>${name}</td>
+      <td class="num">${resp}</td>
+      <td class="num">${res}</td>
+      <td class="num">${committed}</td>
+    </tr>
+  `).join('');
+  document.getElementById('slaNote').innerHTML = d.slaNote;
+
+  document.getElementById('tiersHeading').innerHTML = d.tiersHeading;
+  document.getElementById('tiersDesc').innerHTML = d.tiersDesc;
+  document.getElementById('staffCol1').innerHTML = d.staffCol1;
+  document.getElementById('escalationRow').innerHTML = d.escalation.map((t,i)=>{
+    const box = `<div class="tier"><div class="tlabel">${t[0]}</div><div class="tname">${t[1]}</div><div class="tshift">${t[2]}</div></div>`;
+    return i < d.escalation.length-1 ? box + '<div class="arrow">→</div>' : box;
+  }).join('');
+  document.getElementById('staffBody').innerHTML = d.staff.map(([tier,fte,fn])=>`
+    <tr><td>${tier}</td><td class="num">${fte}</td><td>${fn}</td></tr>
+  `).join('');
+
+  document.getElementById('pricingList').innerHTML = d.pricing.map(([name,note,amt,basis])=>`
+    <div class="price-row">
+      <div><div class="pname">${name}</div><div class="pnote">${note}</div></div>
+      <div class="${amt?'amt':'amt tbd'}">${amt ? amt : 'Not stated in SOW'}</div>
+      <div class="amt">${basis}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('commsGrid').innerHTML = d.comms.map(([label,val])=>`
+    <div class="comm"><div class="clabel">${label}</div><div class="cval">${val}</div></div>
+  `).join('');
+
+  document.getElementById('pageFooter').innerHTML = d.footer;
+  document.getElementById('railFoot').innerHTML = d.sowRef + '<br>' + d.client + ' ⇄ Amihan/Nmblr';
+
+  renderSwitcher();
+  setActiveStub();
+}
+
+const stubs = () => document.querySelectorAll('.stub');
+const sections = () => Array.from(stubs()).map(s => document.querySelector(s.getAttribute('href')));
+function setActiveStub(){
+  let idx = 0;
+  sections().forEach((sec, i) => { if (sec && sec.getBoundingClientRect().top - 80 <= 0) idx = i; });
+  stubs().forEach((s, i) => s.classList.toggle('active', i === idx));
+}
+document.addEventListener('scroll', setActiveStub, { passive: true });
+
+(async function init(){
+  await loadCustomProjects();
+  await loadStatusOverrides();
+  renderAll();
+})();
+</script>
+</body>
+</html>
